@@ -33,7 +33,7 @@ setInterval(() => {
     calibrateChannel.send(Date.now())
 }, 1000)
 
-router.get("/schedule/:timestamp", (req, res) => {
+router.post("/schedule/:timestamp", (req, res) => {
   const triggerChannel = new SseChannel()
   const timestamp = req.params.timestamp
 
@@ -71,7 +71,7 @@ router.get("/schedule/:timestamp", (req, res) => {
         console.log(scheduler)
       }, delay)
 
-      console.log("Sending trigger for job " + id + " in " + delay + "milliseconds")
+      console.log("Sending trigger for job " + id + " in " + delay + " milliseconds")
       console.log(scheduler)
       res.setHeader('Content-Type', 'text/plain; charset=utf-8')
       res.end(id)

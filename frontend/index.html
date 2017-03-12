@@ -4,22 +4,26 @@
 
 </head>
 <body>
-  <boolet></boolet>
+  <routes></routes>
 
   <script src="https://cdn.jsdelivr.net/riot/3.0/riot.min.js"></script>
-  <script src="node_modules/riot-route/lib/tag.js"></script>
+  <script src="node_modules/riot-route/dist/route+tag.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/superagent/3.3.1/superagent.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment.min.js"></script>
 
   <!-- include pre-compiled tags (normal javascript) -->
-  <script src="js/app.js"></script>
+  <script src="app.js"></script>
 
   <!-- mount the same way -->
   <script type="text/javascript">
-  let bus = riot.observable();
+  let bus = riot.observable()
   // riot.util.tmpl.errorHandler = function(err) {
   //   console.log(JSON.stringify(err));
   //   console.log(err);
   // };
-  riot.mount('*');
+  riot.mount('*')
+  
+  route("schedule")
   </script>
 </body>
 </html>

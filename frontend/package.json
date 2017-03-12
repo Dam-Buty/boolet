@@ -2,9 +2,8 @@
   "name": "boolet-web",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "main": "index.js",  "scripts": {
+    "build": "rm -f app.js && riot --config riot.config"
   },
   "author": "",
   "license": "ISC",
