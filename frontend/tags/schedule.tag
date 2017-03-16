@@ -20,9 +20,7 @@
       superagent
       .post("/api/schedule/" + timestamp)
       .end((err, res) => {
-        console.log(res)
-        console.log("subscribe/" + res.text)
-        route("subscribe/" + res.text)
+        route("boolet/" + res.text)
       })
     }
   </script>

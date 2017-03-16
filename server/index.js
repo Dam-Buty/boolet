@@ -3,6 +3,8 @@ const http = require('http')
 const Router = require('node-simple-router')
 const identifiers = require("./identifiers")
 
+const TRIGGER = "SHOOT"
+
 const calibrateChannel = new SseChannel()
 
 const router = Router()
@@ -65,7 +67,7 @@ router.post("/schedule/:timestamp", (req, res) => {
     } else {
       setTimeout(() => {
         console.log("Sending trigger for job " + id)
-        triggerChannel.send(true)
+        triggerChannel.send(TRIGGER)
         console.log("Deleting from scheduler")
         scheduler[id] = undefined
         console.log(scheduler)
@@ -88,6 +90,7 @@ router.get("/subscribe/:id", (req, res) => {
     console.log("Added listener on " + id + " channel")
 
     triggerChannel.addClient(req, res)
+    triggerChannel.send(scheduler[id].when)
   } else {
     res.writeHead(404)
     res.end()
