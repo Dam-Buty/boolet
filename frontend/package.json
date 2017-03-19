@@ -2,12 +2,14 @@
   "name": "boolet-web",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",  "scripts": {
+  "main": "index.js",
+  "scripts": {
     "build": "rm -f app.js && riot --config riot.config"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "node-sass": "^4.5.0",
     "riot": "^3.3.2",
     "riot-route": "^3.1.0"
   }
