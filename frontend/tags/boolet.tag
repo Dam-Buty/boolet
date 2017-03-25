@@ -4,13 +4,26 @@
   </section>
 
   <script>
-    this.on("route", boolet => {
-      const source = new EventSource("/api/subscribe/" + boolet)
+    delay = "xXx"
 
-      source.onmessage = event => {
-        console.log(event)
-      }
+    this.on("route", boolet => {
+      console.log(boolet)
+      fetch("/api/boolet/" + boolet + "/when")
+      .then(delay => {
+          this.delay = delay
+      })
+      .then(() => {
+        const source = new EventSource("/api/boolet/" + boolet + "/subscribe")
+
+        source.onmessage = event => {
+          console.log(event)
+        }
+      })
     })
+
+    setInterval(() => {
+      this.delay = this.delay - 1
+    }, 1000)
 
   </script>
 </boolet>

@@ -16,10 +16,12 @@
     doSchedule = () => {
       const timestamp = moment().add(delay, "s").format("x")
 
-      superagent
-      .post("/api/schedule/" + timestamp)
-      .end((err, res) => {
-        route("boolet/" + res.text)
+      fetch('api/schedule/' + timestamp, { method: 'post' })
+      .then(res=> {
+        return res.text()
+      })
+      .then(boolet => {
+        route("boolet/" + boolet)
       })
     }
   </script>
