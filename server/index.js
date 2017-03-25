@@ -10,7 +10,9 @@ let scheduler = new Scheduler()
 
 router.post("/schedule/:timestamp", (req, res) => {
   const idx = scheduler.create(req.params.timestamp)
-  res.redirect("/boolet/" + idx)
+  
+  res.writeHead(200)
+  res.end(idx)
 })
 
 router.get("/boolet/:idx", (req, res) => {

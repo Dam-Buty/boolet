@@ -12,7 +12,6 @@
 
   <script>
     delay = 10
-    boocode = "not yet"
 
     doSchedule = () => {
       const timestamp = moment().add(delay, "s").format("x")

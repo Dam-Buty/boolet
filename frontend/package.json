@@ -4,11 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "rm -f app.js && riot --config riot.config"
+    "build": "rm -f app.js && riot --config riot.config",
+    "serve": "npm run build && http-server ."
   },
   "author": "",
   "license": "ISC",
-  "devDependencies": {
+  "dependencies": {
+    "http-server": "^0.9.0",
     "node-sass": "^4.5.0",
     "riot": "^3.3.2",
     "riot-route": "^3.1.0"
