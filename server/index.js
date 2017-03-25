@@ -1,104 +1,31 @@
-const SseChannel = require('sse-channel')
+
 const http = require('http')
 const Router = require('node-simple-router')
-const identifiers = require("./identifiers")
 
-const TRIGGER = "SHOOT"
+const router = new Router()
 
-const calibrateChannel = new SseChannel()
+const Scheduler = require("./classes/Scheduler")
 
-const router = Router()
-
-let scheduler = {}
-
-const getIdentifier = () => {
-  let thisOnesFree
-
-  let isOneFree = identifiers.some(id => {
-    if (scheduler[id] === undefined) {
-      thisOnesFree = id
-      return true
-    }
-
-    return false
-  })
-
-  if (isOneFree) {
-    return thisOnesFree
-  } else {
-    return null
-  }
-}
-
-// Return the date every second to recalibrate
-setInterval(() => {
-    calibrateChannel.send(Date.now())
-}, 1000)
+let scheduler = new Scheduler()
 
 router.post("/schedule/:timestamp", (req, res) => {
-  const triggerChannel = new SseChannel()
-  const timestamp = req.params.timestamp
-
-  const id = getIdentifier()
-
-  console.log("Scheduling event " + id + "at timestamp " + timestamp)
-
-  if (id === null) {
-    res.writeHead(500)
-    res.end()
-  } else {
-
-    scheduler[id] = {
-      when: timestamp,
-      channel: triggerChannel
-    }
-
-    const delay = timestamp - Date.now()
-
-    console.log("---")
-    console.log(timestamp)
-    console.log(Date.now())
-    console.log(delay)
-    console.log("---")
-
-    if (delay < 0) {
-      res.writeHead(422)
-      res.end()
-    } else {
-      setTimeout(() => {
-        console.log("Sending trigger for job " + id)
-        triggerChannel.send(TRIGGER)
-        console.log("Deleting from scheduler")
-        scheduler[id] = undefined
-        console.log(scheduler)
-      }, delay)
-
-      console.log("Sending trigger for job " + id + " in " + delay + " milliseconds")
-      console.log(scheduler)
-      res.setHeader('Content-Type', 'text/plain; charset=utf-8')
-      res.end(id)
-    }
-  }
+  const idx = scheduler.create(req.params.timestamp)
+  res.redirect("/boolet/" + idx)
 })
 
-router.get("/subscribe/:id", (req, res) => {
-  const id = req.params.id
+router.get("/boolet/:idx", (req, res) => {
+  const idx = req.params.idx
 
-  if (scheduler[id]) {
-    const triggerChannel = scheduler[id].channel
+  const boolet = scheduler.get(idx)
 
-    console.log("Added listener on " + id + " channel")
-
-    triggerChannel.addClient(req, res)
-    triggerChannel.send(scheduler[id].when)
+  if (boolet) {
+    boolet.channel.addClient(req, res)
+    res.writeHead(200)
+    res.end(boolet.when)
   } else {
     res.writeHead(404)
     res.end()
   }
-})
-
-router.get("/calibrate", (req, res) => {
-  calibrateChannel.addClient(req, res)
 })
 
 // Create a regular HTTP server (works with express, too)
